@@ -18,6 +18,7 @@ const Imageupload = () => {
   const [imagename, setImagename] = useState("Upload");
   const [predictions, setPredictions] = useState([]);
   const [predicting, setPredicting] = useState(false);
+  var errmsg=null
 //   console.log(imageurl);
 
   const onchange = e => {
@@ -28,13 +29,15 @@ const Imageupload = () => {
   const onpredict = async e => {
     if (imageurl === null) {
       console.log("No Image Uploaded");
+      errmsg=<div className="text-center" style={{color:"white"}}>No Image Uploaded</div>
+      
     } else {
       setPredicting(true);
       const predictimg = document.getElementById("predict");
       const model = await mobilenet.load();
       const predictions = await model.classify(predictimg);
       console.log(predictions);
-      model.layers[0].getWeights().print();
+      // model.layers[0].getWeights().print();
       
       setImagename("Upload");
       setPredicting(false);
@@ -76,8 +79,10 @@ const Imageupload = () => {
         {predicting && (
          <div className={classes.root}>
          <CircularProgress />
+         
        </div>
         )}
+        {errmsg}
       </div>
       {predictions.length!==0?(<Predictionscomp predictions={predictions}/>):null}
     </div>
