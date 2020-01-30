@@ -116,7 +116,7 @@ const Imageupload = () => {
               style={{ width: "100%", height: "35vh", objectFit: "cover" }}
             />
             <div className="card-body">
-              <label className="overflow-ellipsis btn btn-primary justify-content-center">
+              <label className="overflow-ellipsis btn btn-primary justify-content-center" style={{marginBottom:"0px"}}>
                 <input
                   type="file"
                   name="photo"
@@ -128,23 +128,23 @@ const Imageupload = () => {
               </label>
             </div>
           </div>
-          <button
-            className="btn btn-danger"
-            onClick={onpredict}
-            style={{
-              marginTop: "20px",
-              backgroundColor: "#424242",
-              borderRadius: "5px"
-            }}
-          >
-            {predicting ? (
+          {predicting ? (
               <span>
-                <CircularProgress size={20}/>
+                <CircularProgress style={{marginTop:"20px"}}/>
               </span>
             ) : (
-              "Predict"
+              <button
+              className="btn btn-danger"
+              onClick={onpredict}
+              style={{
+                marginTop: "20px",
+                backgroundColor: "#424242",
+                borderRadius: "5px"
+              }}
+            >
+              Predict
+            </button>
             )}
-          </button>
         </div>
       </div>
       <div className="justify-content-center">{errmsg}</div>
