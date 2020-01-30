@@ -10,7 +10,12 @@ const Navbar = () => {
       >
         <NavLink
           className="navbar-brand mx-auto"
-          style={{ display: "flex", alignItems: "center", cursor: "pointer",textAlign:"center" }}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            cursor: "pointer",
+            textAlign: "center"
+          }}
           to="/"
           exact
         >
@@ -22,7 +27,7 @@ const Navbar = () => {
             alt=""
             style={{ marginRight: "10px" }}
           ></img>
-          <span className="d-none d-sm-inline">BYON</span>
+          <span className="navbar-text">BYON</span>
         </NavLink>
         <button
           className="navbar-toggler"
@@ -32,14 +37,15 @@ const Navbar = () => {
           aria-controls="navbarNav"
           aria-expanded="false"
           aria-label="Toggle navigation"
+          style={{ border:"none" }}
         >
           <span className="navbar-toggler-icon"></span>
         </button>
         <div
-          className="collapse navbar-collapse justify-content-end"
+          className="collapse navbar-collapse"
           id="navbarNav"
         >
-          <ul className="navbar-nav" style={{ marginLeft: "30px" }}>
+          <ul className="nav navbar-nav ml-sm-auto" style={{ marginLeft: "30px" }}>
             <li className="nav-item align-self-center">
               <NavLink
                 className="nav-link"

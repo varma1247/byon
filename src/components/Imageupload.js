@@ -6,8 +6,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Chartcomp from "./Chartcomp";
 import { Bar } from "react-chartjs-2";
-import { defaults } from 'react-chartjs-2'
-defaults.global.defaultFontColor = 'white';
+import { defaults } from "react-chartjs-2";
+defaults.global.defaultFontColor = "white";
 const useStyles = makeStyles(theme => ({
   root: {
     "& > * + *": {
@@ -26,9 +26,11 @@ const Imageupload = () => {
   //   console.log(imageurl);
 
   const onchange = e => {
-    setImageurl(URL.createObjectURL(e.target.files[0]));
-    setImagename(e.target.files[0].name);
-    setPredictions([]);
+    if (e.target.files[0]) {
+      setImageurl(URL.createObjectURL(e.target.files[0]));
+      setImagename(e.target.files[0].name);
+      setPredictions([]);
+    }
   };
   const onpredict = async e => {
     if (imageurl === null) {
@@ -90,8 +92,12 @@ const Imageupload = () => {
         },
         options: {
           legend: {
-            display: true
-          },
+            display: true,
+            labels:{
+              boxWidth:0
+            }
+
+          }
         }
       });
     }
@@ -100,7 +106,7 @@ const Imageupload = () => {
   return (
     <div>
       <div className="row justify-content-center">
-        <div className="col-8 col-sm-4" style={{ marginTop: "20px" }}>
+        <div className="col-8 col-xs-4 col-lg-5" style={{ marginTop: "20px" }}>
           <div className="card bg-dark" style={{ borderRadius: "5px" }}>
             <img
               src={imageurl ? imageurl : imageupload_default}
@@ -110,7 +116,7 @@ const Imageupload = () => {
               style={{ width: "100%", height: "35vh", objectFit: "cover" }}
             />
             <div className="card-body">
-              <label className="btn btn-primary justify-content-center">
+              <label className="overflow-ellipsis btn btn-primary justify-content-center">
                 <input
                   type="file"
                   name="photo"
@@ -131,18 +137,17 @@ const Imageupload = () => {
               borderRadius: "5px"
             }}
           >
-            Predict
+            {predicting ? (
+              <span>
+                <CircularProgress size={20}/>
+              </span>
+            ) : (
+              "Predict"
+            )}
           </button>
         </div>
       </div>
-      <div className="justify-content-center">
-        {predicting && (
-          <div className={classes.root}>
-            <CircularProgress />
-          </div>
-        )}
-        {errmsg}
-      </div>
+      <div className="justify-content-center">{errmsg}</div>
       <div
         className="col-8 col-sm-6"
         style={{ margin: "auto", height: "250px", marginTop: "10px" }}
