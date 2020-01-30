@@ -10,7 +10,7 @@ const Navbar = () => {
       >
         <NavLink
           className="navbar-brand mx-auto"
-          style={{ display: "flex", alignItems: "center", cursor: "pointer" }}
+          style={{ display: "flex", alignItems: "center", cursor: "pointer",textAlign:"center" }}
           to="/"
           exact
         >
@@ -53,7 +53,7 @@ const Navbar = () => {
                 Build Your Own
               </a> */}
             </li>
-            <li className="nav-item">
+            <li className="nav-item align-self-center">
               <NavLink
                 className="nav-link"
                 exact
@@ -66,14 +66,14 @@ const Navbar = () => {
                 Train With Your Own Data
               </a> */}
             </li>
-            <li className="nav-item">
+            <li className="nav-item align-self-center">
               <NavLink
                 className="nav-link"
                 exact
                 to="/build"
                 activeClassName="active"
               >
-                Build Your Own
+                Build Your Own Model
               </NavLink>
               {/* <a className="nav-link" href="#">
                 Build Your Own

@@ -5,7 +5,6 @@ import Imageupload from "./components/Imageupload";
 import Navbar from "./components/Navbar";
 import { BrowserRouter as Router, Route,Switch } from "react-router-dom";
 import CircularProgress from "@material-ui/core/CircularProgress";
-
 const Train=()=>{
   return (
     <div>
@@ -20,7 +19,7 @@ function App() {
         <Navbar />
         <Switch>
           <Route path="/" component={Imageupload} exact/>
-          <Route path="/train" component={CircularProgress}/>
+          <Route path="/train" component={Train}/>
          
         </Switch>
       </div>
