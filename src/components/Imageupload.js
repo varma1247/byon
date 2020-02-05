@@ -37,10 +37,11 @@ const Imageupload = () => {
       const predictimg = document.getElementById("predict");
       // console.log(tf.browser.fromPixels(predictimg).print())
       var imgdata=tf.browser.fromPixels(predictimg)
+      console.log(imgdata);
       tf.browser.toPixels(imgdata).then(d=>{console.log(d);
       })
       imgdata=tf.image.resizeNearestNeighbor(imgdata,[224,224])
-      console.log(imgdata.shape);
+      
       
       imgdata.array().then(d=>console.log(d));
       // document.getElementById("tr").setAttribute("src","jgjh")
@@ -115,7 +116,7 @@ const Imageupload = () => {
               id="predict"
               style={{ width: "100%", height: "30vh", objectFit: "cover" }}
             />
-            <div className="card-body text-center" style={{padding:"5px"}}>
+            <div className="card-body text-center" style={{padding:"10px"}}>
               <label className="overflow-ellipsis btn btn-primary justify-content-center" style={{marginBottom:"0px"}}>
                 <input
                   type="file"
