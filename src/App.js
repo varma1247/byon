@@ -4,14 +4,7 @@ import "./App.css";
 import Imageupload from "./components/Imageupload";
 import Navbar from "./components/Navbar";
 import { BrowserRouter as Router, Route,Switch } from "react-router-dom";
-import CircularProgress from "@material-ui/core/CircularProgress";
-const Train=()=>{
-  return (
-    <div>
-      <h1>Train</h1>
-    </div>
-  )
-}
+import Train from "./components/Train"
 function App() {
   return (
     <Router>
