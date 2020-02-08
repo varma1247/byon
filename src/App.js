@@ -4,7 +4,7 @@ import "./App.css";
 import Imageupload from "./components/Imageupload";
 import Navbar from "./components/Navbar";
 import { BrowserRouter as Router, Route,Switch } from "react-router-dom";
-import Train from "./components/Train"
+import Owndata from "./components/Owndata"
 function App() {
   return (
     <Router>
@@ -12,7 +12,7 @@ function App() {
         <Navbar />
         <Switch>
           <Route path="/" component={Imageupload} exact/>
-          <Route path="/train" component={Train}/>
+          <Route path="/train" component={Owndata}/>
          
         </Switch>
       </div>

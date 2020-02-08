@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import Close from "@material-ui/icons/Close";
+import React from "react";
 import Classes from "./Classes";
+import Training from "./Training"
 const TrainingImagesUpload = ({ traindata,removeClass,editclassname,onupload }) => {
   return (
     <div
@@ -12,6 +12,7 @@ const TrainingImagesUpload = ({ traindata,removeClass,editclassname,onupload }) 
           <Classes classname={classes.class} key={classes.id} removeClass={removeClass} id={classes.id} editclassname={editclassname} onupload={onupload} imageurls={classes.imageurls}/>
         );
       })}
+        {/* <Training/> */}
     </div>
   );
 };

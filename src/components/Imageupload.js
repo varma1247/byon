@@ -2,8 +2,10 @@ import * as mobilenet from "@tensorflow-models/mobilenet";
 import * as tf from "@tensorflow/tfjs";
 // import "@tensorflow/tfjs-node"
 import React, { useState } from "react";
+import Predictcomp from "./Predictcomp"
 import imageupload_default from "../images/uploadimage_default.jpg";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Button from "@material-ui/core/Button";
 import { Bar } from "react-chartjs-2";
 import { defaults } from "react-chartjs-2";
 defaults.global.defaultFontColor = "white";
@@ -37,7 +39,7 @@ const Imageupload = () => {
       const predictimg = document.getElementById("predict");
       // console.log(tf.browser.fromPixels(predictimg).print())
       var imgdata=tf.browser.fromPixels(predictimg)
-      console.log(imgdata);
+      
       tf.browser.toPixels(imgdata).then(d=>{console.log(d);
       })
       imgdata=tf.image.resizeNearestNeighbor(imgdata,[224,224])
@@ -106,16 +108,16 @@ const Imageupload = () => {
   };
   return (
     <div>
-      <div className="row justify-content-center">
+      <div className="row justify-content-center mt-4">
         <div className="col-8 col-xs-4 col-lg-5 text-center" style={{ marginTop: "20px" }}>
-          <div className="card bg-dark" style={{ borderRadius: "5px" }}>
+        <div className="card bg-dark" style={{ borderRadius: "5px" }}>
             <img
               src={imageurl ? imageurl : imageupload_default}
               className="card-img-top"
               alt="..."
               id="predict"
               style={{ width: "100%", height: "30vh", objectFit: "cover" }}
-            />
+            ></img>
             <div className="card-body text-center" style={{padding:"10px"}}>
               <label className="overflow-ellipsis btn btn-primary justify-content-center" style={{marginBottom:"0px"}}>
                 <input
@@ -134,17 +136,25 @@ const Imageupload = () => {
                 <CircularProgress style={{marginTop:"10px"}}/>
               </span>
             ) : (
-              <button
-              className="btn btn-danger"
-              onClick={onpredict}
-              style={{
-                marginTop: "10px",
-                backgroundColor: "#424242",
-                borderRadius: "5px"
-              }}
-            >
-              Predict
-            </button>
+            //   <button
+            //   className="btn btn-danger"
+            //   onClick={onpredict}
+            //   style={{
+            //     marginTop: "10px",
+            //     backgroundColor: "#424242",
+            //     borderRadius: "5px"
+            //   }}
+            // >
+            //   Predict
+            // </button>
+            <Button
+            className="mt-3"
+            variant="outlined"
+            color="secondary"
+            onClick={onpredict}
+          >
+            Predict
+          </Button>
             )}
         </div>
       </div>

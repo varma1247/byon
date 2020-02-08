@@ -1,11 +1,8 @@
 import React from "react";
 import Close from "@material-ui/icons/Close";
 import TextField from "@material-ui/core/TextField";
-import Edit from "@material-ui/icons/Edit";
-import imageupload_default from "../images/uploadimage_default.jpg";
 import imageupload from "../images/upload.png";
 import { makeStyles } from "@material-ui/core/styles";
-import { image } from "@tensorflow/tfjs";
 const useStyles = makeStyles(theme => ({
   root: {
     "& > *": {
@@ -23,7 +20,7 @@ const Classes = ({ classname, removeClass, id, editclassname,onupload,imageurls 
   const classstyle = useStyles();
   return (
     <div
-      className="card text-white bg-dark mb-3 col-11"
+      className="card text-white bg-dark mb-3 col-9"
       style={{ borderRadius: "10px", height: "220px" }}
     >
       <div className="card-header" style={{ fontSize: "20px" }}>
@@ -73,6 +70,7 @@ const Classes = ({ classname, removeClass, id, editclassname,onupload,imageurls 
           <img
             src={imageupload}
             style={{ width: "100%", height: "100%" }}
+            alt=""
           ></img>
         </label>
         {
@@ -84,7 +82,7 @@ const Classes = ({ classname, removeClass, id, editclassname,onupload,imageurls 
                   height: "80px",
                   backgroundColor: "#302C2C",
                   borderRadius: "10px"
-                }} src={imgurl}></img>
+                }} src={imgurl} key={index} alt=""></img>
             })
         }
       </div>
