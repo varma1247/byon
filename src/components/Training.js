@@ -2,11 +2,17 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@material-ui/core";
 import * as tf from "@tensorflow/tfjs";
 import * as tfvis from "@tensorflow/tfjs-vis";
-import { dispose } from "@tensorflow/tfjs";
+import { dispose, callbacks } from "@tensorflow/tfjs";
 import { min } from "moment";
-
+import Input from '@material-ui/core/Input';
 const Training = ({ traindata, savemodel, savedmodel }) => {
+  const [empty,setEmpty]=useState(false)
   const train = async data => {
+    if (traindata[0].imagetensors.length===0 ||traindata.length===1){
+      setEmpty(true)
+    }
+    else{
+      setEmpty(false)
     var tensors = [];
     var labels = [];
     var labelnames = [];
@@ -17,46 +23,55 @@ const Training = ({ traindata, savemodel, savedmodel }) => {
         labels.push(index);
       });
     });
-    var i = 0,
-      len = tensors.length,
-      next,
-      order = [];
-    while (i < len) order[i] = ++i; //[1,2,3...]
-    order.sort(function() {
-      return Math.random() - 0.5;
-    });
+    // var i = 0,
+    //   len = tensors.length,
+    //   next,
+    //   order = [];
+    // while (i < len) order[i] = ++i; //[1,2,3...]
+    // order.sort(function() {
+    //   return Math.random() - 0.5;
+    // });
 
-    for (i = 0; i < len; i++) {
-      next = order[i];
-      tensors.push(tensors[next]);
-      labels.push(labels[next]);
-    }
-    tensors.splice(1, len);
-    labels.splice(1, len);
-    var X_train = tf.stack(tensors).div(255);
-    tf.dispose(tensors);
-    tf.dispose(labels);
-    // console.log(X_train);
-    // console.log(X_train.shape);
-    // X_train.print();
-    // console.log(tf.oneHot(labels, traindata.length).shape);
-    var y_train = tf.oneHot(labels, traindata.length);
-
-    const surface = { name: "show.fitCallbacks", tab: "Training" };
+    // for (i = 0; i < len; i++) {
+    //   next = order[i];
+    //   tensors.push(tensors[next]);
+    //   labels.push(labels[next]);
+    // }
+    var [X_train,y_train]=tf.tidy(()=>{
+      // tensors.splice(1, len);
+      // labels.splice(1, len);
+      return [tf.stack(tensors).div(255),tf.oneHot(labels, traindata.length)]
+    })
+  console.log(labels);
+  
+    const surface = { name: "Loss and Accuracy Visualization", tab: "Training" };
     const model = tf.sequential({
       layers: [
         tf.layers.conv2d({
-          inputShape: [28, 28, 3],
+          inputShape: [50, 50, 3],
           kernelSize: 3,
           filters: 16,
           name: "conv1",
           activation: "relu",
-          padding: "same"
+          padding: "same",
+        }),
+        tf.layers.maxPool2d({
+          poolSize: 2
         }),
         tf.layers.conv2d({
           kernelSize: 3,
-          filters: 16,
-          name: "conv2",
+          filters: 32,
+          name: "conv3",
+          activation: "relu",
+          padding: "same"
+        }),
+        tf.layers.maxPool2d({
+          poolSize: 2
+        }),
+        tf.layers.conv2d({
+          kernelSize: 3,
+          filters: 64,
+          name: "conv4",
           activation: "relu",
           padding: "same"
         }),
@@ -67,7 +82,7 @@ const Training = ({ traindata, savemodel, savedmodel }) => {
           name: "flatten"
         }),
         tf.layers.dense({
-          units: 64,
+          units: 32,
           activation: "relu",
           name: "dense1"
         }),
@@ -80,15 +95,21 @@ const Training = ({ traindata, savemodel, savedmodel }) => {
     });
 
     model.compile({
-      loss: tf.losses.softmaxCrossEntropy,
-      optimizer: tf.train.sgd(0.01),
+      loss: "categoricalCrossentropy",
+      optimizer: tf.train.sgd(0.1),
       metrics: ["accuracy"]
     });
+    X_train.array().then(a=>{
+      console.log(a);
+      
+    })
+    
+    tfvis.visor().open()
+
     await model.fit(X_train, y_train, {
-      batchSize: 10,
-      epochs: 75 ,
-      callbacks: tfvis.show.fitCallbacks(surface, ["loss", "acc"]),
-      shuffle: true
+      batchSize: 1,
+      epochs: 200,
+      callbacks: tfvis.show.fitCallbacks(surface, ["loss", "acc"],{callbacks:["onEpochEnd"]}),
     });
     // var skladby = ["skladba00", "skladba01", "skladba02", "skladba03"];
     // var i = 0,
@@ -103,10 +124,11 @@ const Training = ({ traindata, savemodel, savedmodel }) => {
     savemodel(model);
     model
       .predict(X_train)
-      .argMax(1)
+      // .argMax(1)
       .print();
     model.summary();
-    tf.dispose(model);
+    // tf.dispose(model);
+  }
   };
   return (
     <div
@@ -124,14 +146,16 @@ const Training = ({ traindata, savemodel, savedmodel }) => {
         </Button>
       </h5>
       <div className="card-body">
-        <h5 className="card-title">Special title treatment</h5>
+        {/* <h5 className="card-title">Special title treatment</h5>
         <p className="card-text">
           With supporting text below as a natural lead-in to additional content.
         </p>
         <a href="#" className="btn btn-primary">
           Go somewhere
-        </a>
+        </a> */}
+        <Input type="number"/>
       </div>
+      {empty?(<div className="text-center">Upload alteast one image for each class</div>):null}
     </div>
   );
 };

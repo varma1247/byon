@@ -2,7 +2,6 @@ import * as mobilenet from "@tensorflow-models/mobilenet";
 import * as tf from "@tensorflow/tfjs";
 // import "@tensorflow/tfjs-node"
 import React, { useState } from "react";
-import Predictcomp from "./Predictcomp"
 import imageupload_default from "../images/uploadimage_default.jpg";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Button from "@material-ui/core/Button";
@@ -109,7 +108,7 @@ const Imageupload = () => {
   return (
     <div>
       <div className="row justify-content-center mt-4">
-        <div className="col-8 col-xs-4 col-lg-5 text-center" style={{ marginTop: "20px" }}>
+        <div className="col-8 col-xs-3 col-lg-4 text-center" style={{ marginTop: "20px" }}>
         <div className="card bg-dark" style={{ borderRadius: "5px" }}>
             <img
               src={imageurl ? imageurl : imageupload_default}

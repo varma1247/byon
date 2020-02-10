@@ -1,6 +1,6 @@
 import React from "react";
 import Classes from "./Classes";
-import Training from "./Training"
+// import Training from "./Training"
 const TrainingImagesUpload = ({ traindata,removeClass,editclassname,onupload }) => {
   return (
     <div

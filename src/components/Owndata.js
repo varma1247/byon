@@ -2,10 +2,14 @@ import React, { useState, useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import Add from "@material-ui/icons/Add";
 import uuid from "react-uuid";
-import * as tf from "@tensorflow/tfjs";
+// import * as tf from "@tensorflow/tfjs";
 import TrainingImagesUpload from "./TrainingImagesUpload";
+import imageupload_default from "../images/uploadimage_default.jpg";
 import Training from "./Training"
 import imgtotensor from "../utilityfunctions/imgtotensor"
+import CircularProgress from "@material-ui/core/CircularProgress";
+
+// import Imageupload from "./Imageupload"
 const Owndata = () => {
   // const model = tf.sequential();
   // model.add(
@@ -18,6 +22,10 @@ const Owndata = () => {
   const [traindata, setTraindata] = useState([]);
   const [classcount, setclasscount] = useState(0);
   const [model,setModel]=useState(null)
+  const [imageurl, setImageurl] = useState(null);
+  const [imagename, setImagename] = useState("Upload");
+  const [predictions, setPredictions] = useState([]);
+  const [predicting, setPredicting] = useState(false);
   useEffect(() => {
     addClass();
     
@@ -43,6 +51,40 @@ const Owndata = () => {
     setModel(model)
     
   };
+  const onchange = e => {
+    if (e.target.files[0]) {
+      setImageurl(URL.createObjectURL(e.target.files[0]));
+      setImagename(e.target.files[0].name);
+      setPredictions([]);
+
+    }
+  };
+  const onpredict = async e => {
+    if (imageurl === null) {
+      console.log("No Image Uploaded");
+      // errmsg = (
+      //   <div className="text-center" style={{ color: "white" }}>
+      //     No Image Uploaded
+      //   </div>
+      // );
+    } else {
+      setPredicting(true);
+      imgtotensor(imageurl).then((tensor,err)=>{
+        // newtensors.push(tensor)
+        if (err){
+          console.log(err);
+          
+        }
+        else{
+        // if(mod)
+          model.predict(tensor.expandDims().div(255)).print()
+          model.predict(tensor.expandDims().div(255)).argMax(1).print()
+          console.log(tensor.expandDims().toFloat().shape);
+          setPredicting(false);
+        }
+      })
+    }
+  }
   const removeClass = id => {
     const remainingclasses = traindata.filter(item => item.id !== id);
     console.log(id);
@@ -73,11 +115,11 @@ const Owndata = () => {
       // img.setAttribute('height',"100")
       // img.setAttribute('src',objurl)
       // tf.browser.fromPixels(img).array().then(array => console.log(array));
-      const img = new Image();
-      img.src = objurl
-      img.width=28
-      img.height=28
-      img.onload = () => item.imagetensors=[...item.imagetensors,tf.browser.fromPixels(img).toFloat()];
+      // const img = new Image();
+      // img.src = objurl
+      // img.width=28
+      // img.height=28
+      // img.onload = () => item.imagetensors=[...item.imagetensors,tf.browser.fromPixels(img).toFloat()];
       imgtotensor(objurl).then((tensor,err)=>{
         // newtensors.push(tensor)
         if (err){
@@ -123,9 +165,10 @@ const Owndata = () => {
         onupload={onupload}
       />
       <Training traindata={traindata} savemodel={savemodel} savedmodel={model}/>
-      <div className="card bg-dark col-sm-4 ml-4" style={{ borderRadius: "5px" }}>
+      <div className="col-12 col-xs-4 col-lg-4 text-center mt-4" style={{ marginTop: "20px" }}>
+        <div className="card bg-dark" style={{ borderRadius: "5px" }}>
             <img
-              // src={imageurl ? imageurl : imageupload_default}
+              src={imageurl ? imageurl : imageupload_default}
               className="card-img-top"
               alt="..."
               id="predict"
@@ -138,17 +181,55 @@ const Owndata = () => {
                   name="photo"
                   style={{ display: "none" }}
                   accept="image/*"
-                  // onChange={onchange}
+                  onChange={onchange}
                 ></input>
-                {/* {imagename} */}
+                {imagename}
               </label>
             </div>
           </div>
-      {/* <button onClick={e=>{
-        show()
-      }}>Click</button>
-      <canvas></canvas> */}
+          {predicting ? (
+              <span>
+                <CircularProgress style={{marginTop:"10px"}}/>
+              </span>
+            ) : (
+            //   <button
+            //   className="btn btn-danger"
+            //   onClick={onpredict}
+            //   style={{
+            //     marginTop: "10px",
+            //     backgroundColor: "#424242",
+            //     borderRadius: "5px"
+            //   }}
+            // >
+            //   Predict
+            // </button>
+            <Button
+            className="mt-3"
+            variant="outlined"
+            color="secondary"
+            onClick={e=>onpredict(e)}
+            disabled={!model}
+          >
+            Predict
+          </Button>
+            )}
+        </div>
+      
+      <div
+        className="col-7 col-sm-5"
+        style={{ margin: "auto", height: "250px", marginTop: "10px" }}
+      >
+        {/* {chartdata ? (
+          <Bar
+            data={chartdata.data}
+            width={0.1}
+            height={0.1}
+            options={chartdata.options}
+          />
+        ) : null} */}
       </div>
+      </div>
+      
     </div>
   );
 };
