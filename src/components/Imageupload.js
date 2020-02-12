@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import imageupload_default from "../images/uploadimage_default.jpg";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Button from "@material-ui/core/Button";
+import getRandomColor from "../utilityfunctions/getrandomcolor";
 import { Bar } from "react-chartjs-2";
 import { defaults } from "react-chartjs-2";
 defaults.global.defaultFontColor = "white";
@@ -54,21 +55,7 @@ const Imageupload = () => {
       setImagename("Upload");
       setPredicting(false);
       setPredictions(predictions);
-      function getRandomColor() {
-        var characters = "0123456789ABCDEF";
-        var color = "#";
-
-        for (var i = 0; i < 6; i++) {
-          color += characters[getRandomNumber(0, 15)];
-        }
-
-        return color;
-      }
-
-      function getRandomNumber(low, high) {
-        var r = Math.floor(Math.random() * (high - low + 1)) + low;
-        return r;
-      }
+     
       var colours = [];
       var data = [];
       var labels = [];

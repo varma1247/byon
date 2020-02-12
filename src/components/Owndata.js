@@ -2,14 +2,15 @@ import React, { useState, useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import Add from "@material-ui/icons/Add";
 import uuid from "react-uuid";
-// import * as tf from "@tensorflow/tfjs";
 import TrainingImagesUpload from "./TrainingImagesUpload";
 import imageupload_default from "../images/uploadimage_default.jpg";
-import Training from "./Training"
-import imgtotensor from "../utilityfunctions/imgtotensor"
+import Training from "./Training";
+import imgtotensor from "../utilityfunctions/imgtotensor";
 import CircularProgress from "@material-ui/core/CircularProgress";
-
+import getRandomColor from "../utilityfunctions/getrandomcolor";
+import { Bar } from "react-chartjs-2";
 // import Imageupload from "./Imageupload"
+
 const Owndata = () => {
   // const model = tf.sequential();
   // model.add(
@@ -21,17 +22,21 @@ const Owndata = () => {
 
   const [traindata, setTraindata] = useState([]);
   const [classcount, setclasscount] = useState(0);
-  const [model,setModel]=useState(null)
+  const [model, setModel] = useState(null);
   const [imageurl, setImageurl] = useState(null);
   const [imagename, setImagename] = useState("Upload");
-  const [predictions, setPredictions] = useState([]);
   const [predicting, setPredicting] = useState(false);
+  const [labelnames,setlabelnames]=useState([])
+  const [chartdata, setChartdata] = useState(null);
   useEffect(() => {
     addClass();
-    
+
     // eslint-disable-next-line
   }, []);
   // console.log(traindata);
+  const setLabelnames=(labelnames)=>{
+    setlabelnames(labelnames)
+  }
   const addClass = () => {
     var newclassname = (classcount + 1).toString();
     setclasscount(classcount + 1);
@@ -47,16 +52,13 @@ const Owndata = () => {
       }
     ]);
   };
-  const savemodel = (model) => {
-    setModel(model)
-    
+  const savemodel = model => {
+    setModel(model);
   };
   const onchange = e => {
     if (e.target.files[0]) {
       setImageurl(URL.createObjectURL(e.target.files[0]));
       setImagename(e.target.files[0].name);
-      setPredictions([]);
-
     }
   };
   const onpredict = async e => {
@@ -69,29 +71,69 @@ const Owndata = () => {
       // );
     } else {
       setPredicting(true);
-      imgtotensor(imageurl).then((tensor,err)=>{
+      imgtotensor(imageurl).then((tensor, err) => {
         // newtensors.push(tensor)
-        if (err){
+        if (err) {
           console.log(err);
-          
-        }
-        else{
-        // if(mod)
-          model.predict(tensor.expandDims().div(255)).print()
-          model.predict(tensor.expandDims().div(255)).argMax(1).print()
-          console.log(tensor.expandDims().toFloat().shape);
+        } else {
+          // if(mod)
+          var colours = [];
+          var data = [];
+          var labels = [];
+          var total = 1;
+          model
+            .predict(tensor.expandDims().div(255))
+            .data()
+            .then(a => {
+              for (var i=0;i<2;i++){
+                data.push((a[i]*100).toFixed(4))
+                total=total-a[i]
+                labels.push(labelnames[i])
+                colours.push(getRandomColor())
+              }
+              data.push((total*100).toFixed(4))
+              labels.push("Other")
+
+              colours.push(getRandomColor())
+
+            setChartdata({
+              data: {
+                labels: labels,
+                datasets: [
+                  {
+                    label: "Predictions",
+                    data: data,
+                    backgroundColor: colours
+                  }
+                ]
+              },
+              options: {
+                legend: {
+                  display: true,
+                  labels:{
+                    boxWidth:0
+                  }
+      
+                },
+                maintainAspectRatio:false
+              }
+            });
+            });
+
+          // console.log(model.getLayer("conv1").getWeights()[0]);
+          // console.log(tensor.expandDims().toFloat().shape);
           setPredicting(false);
         }
-      })
+      });
     }
-  }
+  };
   const removeClass = id => {
     const remainingclasses = traindata.filter(item => item.id !== id);
     console.log(id);
 
     setTraindata(remainingclasses);
   };
-  const editclassname = (id,val) => {
+  const editclassname = (id, val) => {
     var index = traindata.findIndex(el => el.id === id);
     var remainingclasses = traindata.filter(item => item.id !== id);
     var item = traindata[index];
@@ -101,15 +143,15 @@ const Owndata = () => {
 
     setTraindata(remainingclasses);
   };
-  const onupload=(id,files)=>{
+  const onupload = (id, files) => {
     var index = traindata.findIndex(el => el.id === id);
     var remainingclasses = traindata.filter(item => item.id !== id);
     var item = traindata[index];
-    var newurls=[]
+    var newurls = [];
     // var newtensors=[]
     files.forEach(file => {
-      var objurl=URL.createObjectURL(file)
-      newurls.push(objurl)
+      var objurl = URL.createObjectURL(file);
+      newurls.push(objurl);
       // var img=document.createElement('img')
       // img.setAttribute('width',"100")
       // img.setAttribute('height',"100")
@@ -120,117 +162,129 @@ const Owndata = () => {
       // img.width=28
       // img.height=28
       // img.onload = () => item.imagetensors=[...item.imagetensors,tf.browser.fromPixels(img).toFloat()];
-      imgtotensor(objurl).then((tensor,err)=>{
+      imgtotensor(objurl).then((tensor, err) => {
         // newtensors.push(tensor)
-        if (err){
+        if (err) {
           console.log(err);
-          
+        } else {
+          item.imagetensors = [...item.imagetensors, tensor];
         }
-        else{
-        item.imagetensors=[...item.imagetensors,tensor]
-        }
-      })
-      
+      });
+
       // console.log(tf.browser.fromPixels(img).shape);
-      
     });
-    item.imageurls=[...item.imageurls,...newurls]
-    
+    item.imageurls = [...item.imageurls, ...newurls];
+
     remainingclasses.splice(index, 0, item);
     setTraindata(remainingclasses);
     // tf.browser.toPixels(traindata[0].imagetensors[0],document.getElementsByTagName("canvas")[0])
     // console.log(traindata)
     // traindata[0].imagetensors[0].print()
-  }
+  };
   return (
-    <div className="container-fluid">
-      <div
-        className="row col-12 col-sm-6 mt-4 justify-content-center"
-        style={{ padding: "0px" }}
-      >
-        <Button
-          variant="outlined"
-          color="primary"
-          startIcon={<Add />}
-          onClick={addClass}
+    <>
+      <div className="container-fluid" id="tr">
+        <div
+          className="row col-12 col-sm-6 mt-4 justify-content-center"
+          style={{ padding: "0px" }}
         >
-          ADD CLASS
-        </Button>
-      </div>
-      <div className="row">
-      <TrainingImagesUpload
-        traindata={traindata}
-        removeClass={removeClass}
-        editclassname={editclassname}
-        onupload={onupload}
-      />
-      <Training traindata={traindata} savemodel={savemodel} savedmodel={model}/>
-      <div className="col-12 col-xs-4 col-lg-4 text-center mt-4" style={{ marginTop: "20px" }}>
-        <div className="card bg-dark" style={{ borderRadius: "5px" }}>
-            <img
-              src={imageurl ? imageurl : imageupload_default}
-              className="card-img-top"
-              alt="..."
-              id="predict"
-              style={{ width: "100%", height: "30vh", objectFit: "cover" }}
-            ></img>
-            <div className="card-body text-center" style={{padding:"10px"}}>
-              <label className="overflow-ellipsis btn btn-primary justify-content-center" style={{marginBottom:"0px"}}>
-                <input
-                  type="file"
-                  name="photo"
-                  style={{ display: "none" }}
-                  accept="image/*"
-                  onChange={onchange}
-                ></input>
-                {imagename}
-              </label>
+          <Button
+            variant="outlined"
+            color="primary"
+            startIcon={<Add />}
+            onClick={addClass}
+          >
+            ADD CLASS
+          </Button>
+        </div>
+        <div className="row">
+          <TrainingImagesUpload
+            traindata={traindata}
+            removeClass={removeClass}
+            editclassname={editclassname}
+            onupload={onupload}
+          />
+          <Training
+            traindata={traindata}
+            savemodel={savemodel}
+            savedmodel={model}
+            labelnames={labelnames}
+            setlabelnames={setLabelnames}
+          />
+          <div className="col-12 col-xs-4 col-lg-4 text-center mt-4">
+            <div className="card bg-dark" style={{ borderRadius: "5px" }}>
+              <img
+                src={imageurl ? imageurl : imageupload_default}
+                className="card-img-top"
+                alt="..."
+                id="predict"
+                style={{ width: "100%", height: "35vh", objectFit: "cover" }}
+              ></img>
+              <div
+                className="card-body text-center"
+                style={{ padding: "10px" }}
+              >
+                <label
+                  className="overflow-ellipsis btn btn-primary justify-content-center"
+                  style={{ marginBottom: "0px" }}
+                >
+                  <input
+                    type="file"
+                    name="photo"
+                    style={{ display: "none" }}
+                    accept="image/*"
+                    onChange={onchange}
+                  ></input>
+                  {imagename}
+                </label>
+              </div>
             </div>
-          </div>
-          {predicting ? (
+            {predicting ? (
               <span>
-                <CircularProgress style={{marginTop:"10px"}}/>
+                <CircularProgress style={{ marginTop: "10px" }} />
               </span>
             ) : (
-            //   <button
-            //   className="btn btn-danger"
-            //   onClick={onpredict}
-            //   style={{
-            //     marginTop: "10px",
-            //     backgroundColor: "#424242",
-            //     borderRadius: "5px"
-            //   }}
-            // >
-            //   Predict
-            // </button>
-            <Button
-            className="mt-3"
-            variant="outlined"
-            color="secondary"
-            onClick={e=>onpredict(e)}
-            disabled={!model}
-          >
-            Predict
-          </Button>
+              //   <button
+              //   className="btn btn-danger"
+              //   onClick={onpredict}
+              //   style={{
+              //     marginTop: "10px",
+              //     backgroundColor: "#424242",
+              //     borderRadius: "5px"
+              //   }}
+              // >
+              //   Predict
+              // </button>
+              <Button
+                className="mt-3"
+                variant="outlined"
+                color="secondary"
+                onClick={e => onpredict(e)}
+                disabled={!model}
+              >
+                Predict
+              </Button>
             )}
-        </div>
-      
-      <div
-        className="col-7 col-sm-5"
-        style={{ margin: "auto", height: "250px", marginTop: "10px" }}
-      >
-        {/* {chartdata ? (
+            {chartdata ? (
+          <div
+          style={{ margin: "auto", height: "200px", marginTop: "10px" ,width:"300px"}}
+        >
           <Bar
+            type='horizontalBar'
             data={chartdata.data}
-            width={0.1}
-            height={0.1}
+            width={0.05}
+            height={0.0001}
             options={chartdata.options}
           />
-        ) : null} */}
+          </div>
+        ) : null}
+          </div>
+        </div>
+        <div className="row">
+          <div id="can" className="col-12"></div>
+        </div>
       </div>
-      </div>
-      
-    </div>
+    </>
   );
 };
 export default Owndata;
