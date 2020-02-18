@@ -46,24 +46,11 @@ const Navbar = () => {
           id="navbarNav"
         >
           <ul className="nav navbar-nav ml-sm-auto" style={{ marginLeft: "30px" }}>
-            <li className="nav-item align-self-center">
+          <li className="nav-item align-self-center">
               <NavLink
                 className="nav-link"
                 exact
                 to="/"
-                activeClassName="active"
-              >
-                ImageNet
-              </NavLink>
-              {/* <a className="nav-link" href="#">
-                Build Your Own
-              </a> */}
-            </li>
-            <li className="nav-item align-self-center">
-              <NavLink
-                className="nav-link"
-                exact
-                to="/train"
                 activeClassName="active"
               >
                 Train With Your Own Data
@@ -85,6 +72,21 @@ const Navbar = () => {
                 Build Your Own
               </a> */}
             </li>
+            <li className="nav-item align-self-center">
+              <NavLink
+                className="nav-link"
+                exact
+                to="/imagenet"
+                activeClassName="active"
+              >
+                ImageNet
+              </NavLink>
+              {/* <a className="nav-link" href="#">
+                Build Your Own
+              </a> */}
+            </li>
+            
+            
           </ul>
         </div>
       </nav>
