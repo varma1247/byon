@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 import Add from "@material-ui/icons/Add";
-import { Button, ButtonGroup, TextField, makeStyles } from "@material-ui/core";
+import { Button, ButtonGroup } from "@material-ui/core";
 import Alert from '@material-ui/lab/Alert';
-
 import Addconv2d from "./Addconv2d";
 import Addpooling from "./Addpooling";
 import Addflatten from "./Addflatten";
 import Adddense from "./Adddense";
-import * as tf from "@tensorflow/tfjs";
 const Buildmodel = ({ ownmodel, setomodel }) => {
   const [conv, setConv] = useState(false);
   const [pool, setPool] = useState(false);

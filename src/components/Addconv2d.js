@@ -4,10 +4,7 @@ import * as tf from "@tensorflow/tfjs";
 import {
   Button,
   TextField,
-  makeStyles,
-  MenuItem,
-  InputLabel,
-  Select
+  makeStyles
 } from "@material-ui/core";
 const useStyles = makeStyles(theme => ({
   root: {

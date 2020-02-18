@@ -95,7 +95,7 @@ const Training = ({ traindata, savemodel, savedmodel, setlabelnames,ownmodel}) =
       ownmodel.forEach(o => {
         newmodel.add(o)
       });
-      const model = ownmodel?newmodel:tf.sequential({
+      var model = ownmodel.length>0?newmodel:tf.sequential({
         layers: [
           tf.layers.conv2d({
             inputShape: traindata[0].imagetensors[0].shape,
