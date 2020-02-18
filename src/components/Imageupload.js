@@ -66,7 +66,7 @@ const Imageupload = () => {
       predictions.push({ className: "Other", probability: total });
       predictions.forEach(pred => {
         colours.push(getRandomColor());
-        data.push((pred.probability * 100).toFixed(4));
+        data.push((pred.probability * 100).toFixed(2));
         labels.push(pred.className.split(",")[0].toUpperCase());
       });
       setChartdata({
@@ -95,7 +95,7 @@ const Imageupload = () => {
   return (
     <div>
       <div className="row justify-content-center mt-4">
-        <div className="col-8 col-xs-3 col-lg-4 text-center" style={{ marginTop: "20px" }}>
+        <div className="col-8 col-xs-3 col-lg-4 text-center animated fadeInLeft delay-0.5s" style={{ marginTop: "20px" }}>
         <div className="card bg-dark" style={{ borderRadius: "5px" }}>
             <img
               src={imageurl ? imageurl : imageupload_default}
@@ -135,9 +135,9 @@ const Imageupload = () => {
             // </button>
             <Button
             className="mt-3"
-            variant="outlined"
+            variant="contained"
             color="secondary"
-            onClick={onpredict}
+            onClick={e=>onpredict()}
           >
             Predict
           </Button>

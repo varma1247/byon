@@ -23,11 +23,11 @@ const Navbar = () => {
             src={logo}
             width="50"
             height="50"
-            className="d-inline-block align-top"
+            className="d-inline-block align-top animated rollIn delay-0.5s"
             alt=""
             style={{ marginRight: "10px" }}
           ></img>
-          <span className="navbar-text">BYON</span>
+          <span className="navbar-text animated fadeInDown delay-0.5s">BYON</span>
         </NavLink>
         <button
           className="navbar-toggler"
@@ -79,7 +79,7 @@ const Navbar = () => {
                 to="/build"
                 activeClassName="active"
               >
-                Build Your Own Model
+                Build Your Own CNN
               </NavLink>
               {/* <a className="nav-link" href="#">
                 Build Your Own

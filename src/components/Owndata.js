@@ -11,7 +11,7 @@ import getRandomColor from "../utilityfunctions/getrandomcolor";
 import { Bar } from "react-chartjs-2";
 // import Imageupload from "./Imageupload"
 
-const Owndata = () => {
+const Owndata = ({ownmodel}) => {
   // const model = tf.sequential();
   // model.add(
   //   tf.layers.dense({ units: 100, activation: "relu", inputShape: [10] })
@@ -26,7 +26,7 @@ const Owndata = () => {
   const [imageurl, setImageurl] = useState(null);
   const [imagename, setImagename] = useState("Upload");
   const [predicting, setPredicting] = useState(false);
-  const [labelnames,setlabelnames]=useState([])
+  const [labelnames, setlabelnames] = useState([]);
   const [chartdata, setChartdata] = useState(null);
   useEffect(() => {
     addClass();
@@ -34,9 +34,9 @@ const Owndata = () => {
     // eslint-disable-next-line
   }, []);
   // console.log(traindata);
-  const setLabelnames=(labelnames)=>{
-    setlabelnames(labelnames)
-  }
+  const setLabelnames = labelnames => {
+    setlabelnames(labelnames);
+  };
   const addClass = () => {
     var newclassname = (classcount + 1).toString();
     setclasscount(classcount + 1);
@@ -71,7 +71,7 @@ const Owndata = () => {
       // );
     } else {
       setPredicting(true);
-      imgtotensor(imageurl).then((tensor, err) => {
+      imgtotensor(imageurl,50,50).then((tensor, err) => {
         // newtensors.push(tensor)
         if (err) {
           console.log(err);
@@ -85,39 +85,51 @@ const Owndata = () => {
             .predict(tensor.expandDims().div(255))
             .data()
             .then(a => {
-              for (var i=0;i<2;i++){
-                data.push((a[i]*100).toFixed(4))
-                total=total-a[i]
-                labels.push(labelnames[i])
-                colours.push(getRandomColor())
+              var predictions = [];
+              for (var i = 0; i < a.length; i++) {
+                predictions.push({
+                  prob: a[i],
+                  label: labelnames[i]
+                });
               }
-              data.push((total*100).toFixed(4))
-              labels.push("Other")
+              predictions = predictions.sort((a, b) =>
+                a.prob < b.prob ? 1 : -1
+              );
+              for (let j = 0; j < 2; j++) {
+                data.push((predictions[j].prob * 100).toFixed(2));
+                total -= predictions[j].prob;
+                labels.push(predictions[j].label);
+                colours.push(getRandomColor());
+              }
+              if(a.length>2){
+              data.push(Math.abs((total * 100).toFixed(2)));
+              labels.push("Other");
+              colours.push(getRandomColor());
+              }
+              console.log(data);
+              console.log(labels);
 
-              colours.push(getRandomColor())
-
-            setChartdata({
-              data: {
-                labels: labels,
-                datasets: [
-                  {
-                    label: "Predictions",
-                    data: data,
-                    backgroundColor: colours
-                  }
-                ]
-              },
-              options: {
-                legend: {
-                  display: true,
-                  labels:{
-                    boxWidth:0
-                  }
-      
+              setChartdata({
+                data: {
+                  labels: labels,
+                  datasets: [
+                    {
+                      label: "Predictions",
+                      data: data,
+                      backgroundColor: colours
+                    }
+                  ]
                 },
-                maintainAspectRatio:false
-              }
-            });
+                options: {
+                  legend: {
+                    display: true,
+                    labels: {
+                      boxWidth: 0
+                    }
+                  },
+                  maintainAspectRatio: false
+                }
+              });
             });
 
           // console.log(model.getLayer("conv1").getWeights()[0]);
@@ -162,7 +174,7 @@ const Owndata = () => {
       // img.width=28
       // img.height=28
       // img.onload = () => item.imagetensors=[...item.imagetensors,tf.browser.fromPixels(img).toFloat()];
-      imgtotensor(objurl).then((tensor, err) => {
+      imgtotensor(objurl,50,50).then((tensor, err) => {
         // newtensors.push(tensor)
         if (err) {
           console.log(err);
@@ -189,10 +201,10 @@ const Owndata = () => {
           style={{ padding: "0px" }}
         >
           <Button
-            variant="outlined"
+            variant="contained"
             color="primary"
             startIcon={<Add />}
-            onClick={addClass}
+            onClick={e=>addClass()}
           >
             ADD CLASS
           </Button>
@@ -210,6 +222,7 @@ const Owndata = () => {
             savedmodel={model}
             labelnames={labelnames}
             setlabelnames={setLabelnames}
+            ownmodel={ownmodel}
           />
           <div className="col-12 col-xs-4 col-lg-4 text-center mt-4">
             <div className="card bg-dark" style={{ borderRadius: "5px" }}>
@@ -257,7 +270,7 @@ const Owndata = () => {
               // </button>
               <Button
                 className="mt-3"
-                variant="outlined"
+                variant="contained"
                 color="secondary"
                 onClick={e => onpredict(e)}
                 disabled={!model}
@@ -266,22 +279,22 @@ const Owndata = () => {
               </Button>
             )}
             {chartdata ? (
-          <div
-          style={{ margin: "auto", height: "200px", marginTop: "10px" ,width:"300px"}}
-        >
-          <Bar
-            type='horizontalBar'
-            data={chartdata.data}
-            width={0.05}
-            height={0.0001}
-            options={chartdata.options}
-          />
+              <div
+                style={{
+                  margin: "auto",
+                  height: "200px",
+                  marginTop: "10px",
+                  width: "400px"
+                }}
+              >
+                <Bar
+                  type="horizontalBar"
+                  data={chartdata.data}
+                  options={chartdata.options}
+                />
+              </div>
+            ) : null}
           </div>
-        ) : null}
-          </div>
-        </div>
-        <div className="row">
-          <div id="can" className="col-12"></div>
         </div>
       </div>
     </>
