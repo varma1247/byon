@@ -25,6 +25,7 @@ const Classes = ({ classname, removeClass, id, editclassname,onupload,imageurls 
     >
       <div className="card-header" style={{ fontSize: "20px" }}>
         <TextField
+          className="float-left"
           id="standard-textarea"
           placeholder={classname}
           InputProps={{

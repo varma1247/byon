@@ -174,7 +174,7 @@ const Training = ({ traindata, savemodel, savedmodel, setlabelnames,ownmodel}) =
           const options = {
             xLabel: "Epoch",
             yLabel: "Value",
-            seriesColors: ["teal"],
+            seriesColors: ["lightseagreen"],
             height: 250,
             zoomToFit: false
           }; // Prep the data
