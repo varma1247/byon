@@ -23,16 +23,16 @@ const Training = ({ traindata, savemodel, savedmodel, setlabelnames,ownmodel}) =
   const [batchsize, setBatchsize] = useState(10);
   const [empty, setEmpty] = useState(false);
   const onepochChange = e => {
-    setEpochs(e.target.value);
+    setEpochs(parseInt(e.target.value));
   };
   const onalphaChange = e => {
-    setAlpha(e.target.value);
+    setAlpha(parseFloat(e.target.value));
   };
   const exportmodel = async () => {
     await savedmodel.save("downloads://my-model");
   };
   const onbsizeChange = e => {
-    setBatchsize(e.target.value);
+    setBatchsize(parseInt(e.target.value));
   };
   const train = async data => {
     if (
