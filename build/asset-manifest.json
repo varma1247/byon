@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/byon/static/css/main.d1b05096.chunk.css",
-    "main.js": "/byon/static/js/main.fc8a2c1b.chunk.js",
-    "main.js.map": "/byon/static/js/main.fc8a2c1b.chunk.js.map",
+    "main.js": "/byon/static/js/main.f8ff70bd.chunk.js",
+    "main.js.map": "/byon/static/js/main.f8ff70bd.chunk.js.map",
     "runtime-main.js": "/byon/static/js/runtime-main.caa85aad.js",
     "runtime-main.js.map": "/byon/static/js/runtime-main.caa85aad.js.map",
     "static/js/2.9405d5c4.chunk.js": "/byon/static/js/2.9405d5c4.chunk.js",
     "static/js/2.9405d5c4.chunk.js.map": "/byon/static/js/2.9405d5c4.chunk.js.map",
     "index.html": "/byon/index.html",
-    "precache-manifest.124956dc1c85d1f1034942d6fbb3be18.js": "/byon/precache-manifest.124956dc1c85d1f1034942d6fbb3be18.js",
+    "precache-manifest.87d4fa901f3885ece27c2581c4737e26.js": "/byon/precache-manifest.87d4fa901f3885ece27c2581c4737e26.js",
     "service-worker.js": "/byon/service-worker.js",
     "static/css/main.d1b05096.chunk.css.map": "/byon/static/css/main.d1b05096.chunk.css.map",
     "static/js/2.9405d5c4.chunk.js.LICENSE.txt": "/byon/static/js/2.9405d5c4.chunk.js.LICENSE.txt",
@@ -19,6 +19,6 @@
     "static/js/runtime-main.caa85aad.js",
     "static/js/2.9405d5c4.chunk.js",
     "static/css/main.d1b05096.chunk.css",
-    "static/js/main.fc8a2c1b.chunk.js"
+    "static/js/main.f8ff70bd.chunk.js"
   ]
 }

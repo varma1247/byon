@@ -50,7 +50,7 @@ const Navbar = () => {
               <NavLink
                 className="nav-link"
                 exact
-                to="/"
+                to={process.env.PUBLIC_URL + '/'}
                 activeClassName="active"
               >
                 Train With Your Own Data
@@ -63,7 +63,7 @@ const Navbar = () => {
               <NavLink
                 className="nav-link"
                 exact
-                to="/build"
+                to={process.env.PUBLIC_URL + '/build'}
                 activeClassName="active"
               >
                 Build Your Own CNN
@@ -76,7 +76,7 @@ const Navbar = () => {
               <NavLink
                 className="nav-link"
                 exact
-                to="/imagenet"
+                to={process.env.PUBLIC_URL + '/imagenet'}
                 activeClassName="active"
               >
                 ImageNet
