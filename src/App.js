@@ -12,7 +12,7 @@ function App() {
     setOwnmodel(m);
   };
   return (
-    <Router basename={process.env.PUBLIC_URL}>
+    <Router>
       <div className="App">
         <Navbar />
         <Switch>
