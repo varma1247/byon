@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import "./App.css";
 import Imageupload from "./components/Imageupload";
 import Navbar from "./components/Navbar";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { HashRouter as Router, Route, Switch } from "react-router-dom";
 import Owndata from "./components/Owndata";
 import Buildmodel from "./components/Buildmodel";
 function App() {
