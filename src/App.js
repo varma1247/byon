@@ -12,17 +12,17 @@ function App() {
     setOwnmodel(m);
   };
   return (
-    <Router>
+    <Router basename={process.env.PUBLIC_URL}>
       <div className="App">
         <Navbar />
         <Switch>
           <Route
-            path={process.env.PUBLIC_URL + '/'}
+            path="/"
             exact
             render={props => <Owndata {...props} ownmodel={ownmodel} />}
           />
           <Route
-            path={process.env.PUBLIC_URL + '/build'}
+            path="/build"
             render={props => (
               <Buildmodel
                 {...props}
@@ -31,7 +31,7 @@ function App() {
               />
             )}
           />
-          <Route path={process.env.PUBLIC_URL + '/imagenet'} component={Imageupload} />
+          <Route path="/imagenet" component={Imageupload} />
         </Switch>
       </div>
     </Router>
