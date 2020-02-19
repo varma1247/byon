@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "e1d178bfdb00c230ce8690be62a547f7",
+    "revision": "0342180173ae074f5ea5e3a5580fe8a4",
     "url": "/byon/index.html"
   },
   {
-    "revision": "bf0d2edb1085fec711e7",
+    "revision": "69eb25f714b6f2245f53",
     "url": "/byon/static/css/main.d1b05096.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/byon/static/js/2.9405d5c4.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "bf0d2edb1085fec711e7",
-    "url": "/byon/static/js/main.f8ff70bd.chunk.js"
+    "revision": "69eb25f714b6f2245f53",
+    "url": "/byon/static/js/main.529e5abc.chunk.js"
   },
   {
     "revision": "cbb91594a591e1bff1d0",
