@@ -17,12 +17,12 @@ function App() {
         <Navbar />
         <Switch>
           <Route
-            path="/"
+            path={process.env.PUBLIC_URL + '/'}
             exact
             render={props => <Owndata {...props} ownmodel={ownmodel} />}
           />
           <Route
-            path="/build"
+            path={process.env.PUBLIC_URL + '/build'}
             render={props => (
               <Buildmodel
                 {...props}
@@ -31,7 +31,7 @@ function App() {
               />
             )}
           />
-          <Route path="/imagenet" component={Imageupload} />
+          <Route path={process.env.PUBLIC_URL + '/imagenet'} component={Imageupload} />
         </Switch>
       </div>
     </Router>
